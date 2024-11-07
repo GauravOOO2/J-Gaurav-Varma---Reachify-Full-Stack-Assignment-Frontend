@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Box, Button, FormControl, FormLabel, Input, VStack, Heading, Text, Link, useToast } from '@chakra-ui/react';
-import { Link as RouterLink, useNavigate  } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function Signup() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const toast = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,9 +16,24 @@ function Signup() {
         username,
         password,
       });
-      navigate.push('/');
+      toast({
+        title: 'Signup successful!',
+        description: 'Please log in with the same credentials.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+      navigate('/');
     } catch (error) {
       console.error('Signup failed:', error);
+      const errorMessage = error.response?.data?.detail || 'Signup failed. Please try again.';
+      toast({
+        title: 'Signup failed',
+        description: errorMessage,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 

@@ -1,26 +1,44 @@
 import React, { useState } from 'react';
 import { Box, Button, FormControl, FormLabel, Input, VStack, Heading, Text, Link, useToast } from '@chakra-ui/react';
-import { Link as RouterLink, useNavigate  } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const toast = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/token', {
-        username,
-        password,
-      }, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-      });
-      localStorage.setItem('token', response.data.access_token);
-      navigate.push('/todos');
+      const response = await axios.post(
+        'http://localhost:8000/token',
+        { username, password },
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+      );
+
+      if (response.data.access_token) {
+        localStorage.setItem('token', response.data.access_token);
+        toast({
+          title: 'Login successful!',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        });
+        navigate('/todos');
+      } else {
+        throw new Error('Invalid token');
+      }
     } catch (error) {
       console.error('Login failed:', error);
+      toast({
+        title: 'Login failed',
+        description: 'Please check your credentials and try again.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 

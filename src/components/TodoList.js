@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, FormControl, FormLabel, Input, VStack, Heading, Text, Link, useToast } from '@chakra-ui/react';
+import { Box, Button, FormControl, FormLabel, Input, VStack, Heading, Text, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import TodoItem from './TodoItem';
 
 function TodoList() {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
+  const [editTodoId, setEditTodoId] = useState(null);
+  const [editTitle, setEditTitle] = useState('');
   const toast = useToast();
 
   useEffect(() => {
@@ -24,6 +26,17 @@ function TodoList() {
   };
 
   const addTodo = async () => {
+    if (!newTodo.trim()) {
+      toast({
+        title: "Error",
+        description: "Please describe your todo task.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
     try {
       const response = await axios.post('http://localhost:8000/todos/', {
         title: newTodo,
@@ -42,6 +55,34 @@ function TodoList() {
       });
     } catch (error) {
       console.error('Failed to add todo:', error);
+    }
+  };
+
+  const editTodo = (todo) => {
+    setEditTodoId(todo._id);
+    setEditTitle(todo.title);
+  };
+
+  const updateTodo = async () => {
+    try {
+      const response = await axios.put(`http://localhost:8000/todos/${editTodoId}`, {
+        title: editTitle,
+        description: '',
+        completed: false
+      }, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      setTodos(todos.map(todo => (todo._id === editTodoId ? response.data : todo)));
+      setEditTodoId(null);
+      setEditTitle('');
+      toast({
+        title: "Todo updated.",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error('Failed to update todo:', error);
     }
   };
 
@@ -77,9 +118,22 @@ function TodoList() {
             Add Todo
           </Button>
         </Box>
+        {editTodoId && (
+          <Box width="100%" mt={4}>
+            <Input
+              placeholder="Edit todo title"
+              value={editTitle}
+              onChange={(e) => setEditTitle(e.target.value)}
+              mr={2}
+            />
+            <Button colorScheme="green" onClick={updateTodo} mt={2}>
+              Update Todo
+            </Button>
+          </Box>
+        )}
         <VStack spacing={4} width="100%" align="stretch">
           {todos.map(todo => (
-            <TodoItem key={todo._id} todo={todo} onDelete={deleteTodo} />
+            <TodoItem key={todo._id} todo={todo} onDelete={deleteTodo} onEdit={editTodo} />
           ))}
         </VStack>
       </VStack>
