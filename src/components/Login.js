@@ -31,7 +31,8 @@ function Login() {
           duration: 5000,
           isClosable: true,
         });
-        navigate('https://j-gaurav-varma-reachify-full-stack-assignment-backend.vercel.app/todos');
+        console.log('Redirecting to /todos');
+        navigate('/todos');
       } else {
         throw new Error('Invalid token');
       }
