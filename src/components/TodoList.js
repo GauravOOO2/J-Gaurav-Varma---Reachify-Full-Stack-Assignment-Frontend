@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Button, FormControl, FormLabel, Input, VStack, Heading, Text, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import TodoItem from './TodoItem';
+import { useNavigate } from 'react-router-dom';
 
 function TodoList() {
   const [todos, setTodos] = useState([]);
@@ -9,6 +10,7 @@ function TodoList() {
   const [editTodoId, setEditTodoId] = useState(null);
   const [editTitle, setEditTitle] = useState('');
   const toast = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchTodos();
@@ -16,7 +18,7 @@ function TodoList() {
 
   const fetchTodos = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/todos/', {
+      const response = await axios.get('https://j-gaurav-varma-reachify-full-stack-assignment-backend.vercel.app/todos/', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setTodos(response.data);
@@ -38,7 +40,7 @@ function TodoList() {
     }
 
     try {
-      const response = await axios.post('http://localhost:8000/todos/', {
+      const response = await axios.post('https://j-gaurav-varma-reachify-full-stack-assignment-backend.vercel.app/todos/', {
         title: newTodo,
         description: '',
         completed: false
@@ -65,7 +67,7 @@ function TodoList() {
 
   const updateTodo = async () => {
     try {
-      const response = await axios.put(`http://localhost:8000/todos/${editTodoId}`, {
+      const response = await axios.put(`https://j-gaurav-varma-reachify-full-stack-assignment-backend.vercel.app/todos/${editTodoId}`, {
         title: editTitle,
         description: '',
         completed: false
@@ -86,9 +88,14 @@ function TodoList() {
     }
   };
 
+  const cancelEdit = () => {
+    setEditTodoId(null);
+    setEditTitle('');
+  };
+
   const deleteTodo = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/todos/${id}`, {
+      await axios.delete(`https://j-gaurav-varma-reachify-full-stack-assignment-backend.vercel.app/todos/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setTodos(todos.filter(todo => todo._id !== id));
@@ -103,10 +110,24 @@ function TodoList() {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token'); // Clear the token
+    toast({
+      title: "Logged out successfully.",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+    navigate('/'); // Redirect to login page
+  };
+
   return (
     <Box minHeight="100vh" bg="gray.50" py={10}>
       <VStack spacing={8} maxWidth="600px" margin="auto" bg="white" p={8} rounded="md" shadow="md">
         <Heading>Fodoist</Heading>
+        <Button colorScheme="red" onClick={handleLogout} mb={4}>
+          Logout
+        </Button>
         <Box width="100%">
           <Input
             placeholder="Add a new todo"
@@ -128,6 +149,9 @@ function TodoList() {
             />
             <Button colorScheme="green" onClick={updateTodo} mt={2}>
               Update Todo
+            </Button>
+            <Button colorScheme="gray" onClick={cancelEdit} mt={2} ml={2}>
+              Cancel Edit
             </Button>
           </Box>
         )}

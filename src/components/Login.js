@@ -13,9 +13,9 @@ function Login() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'http://localhost:8000/token',
+        'https://j-gaurav-varma-reachify-full-stack-assignment-backend.vercel.app/token',
         { username, password },
-        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+        { headers: { 'Content-Type': 'application/json' } }
       );
 
       if (response.data.access_token) {

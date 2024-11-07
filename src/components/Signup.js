@@ -12,7 +12,7 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:8000/register', {
+      await axios.post('https://j-gaurav-varma-reachify-full-stack-assignment-backend.vercel.app/register', {
         username,
         password,
       });
