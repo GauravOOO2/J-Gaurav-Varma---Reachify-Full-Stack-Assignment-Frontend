@@ -14,8 +14,13 @@ function Login() {
     try {
       const response = await axios.post(
         'https://j-gaurav-varma-reachify-full-stack-assignment-backend.vercel.app/token',
-        { username, password },
-        { headers: { 'Content-Type': 'application/json' } }
+        new URLSearchParams({
+          username: username,
+          password: password,
+        }),
+        {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }
       );
 
       if (response.data.access_token) {
