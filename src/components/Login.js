@@ -1,16 +1,32 @@
 import React, { useState } from 'react';
-import { Box, Button, FormControl, FormLabel, Input, VStack, Heading, Text, Link, useToast } from '@chakra-ui/react';
+import { Box, Button, FormControl, FormLabel, Input, VStack, Heading, Text, Link, useToast, Spinner } from '@chakra-ui/react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false); // Loading state
   const navigate = useNavigate();
   const toast = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate input fields
+    if (!username || !password) {
+      toast({
+        title: 'Error',
+        description: 'Both username and password are required.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    setLoading(true); // Start loading
+
     try {
       const response = await axios.post(
         'https://j-gaurav-varma-reachify-full-stack-assignment-backend.vercel.app/token',
@@ -45,6 +61,8 @@ function Login() {
         duration: 3000,
         isClosable: true,
       });
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -61,7 +79,9 @@ function Login() {
             <FormLabel>Password</FormLabel>
             <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           </FormControl>
-          <Button colorScheme="blue" width="100%" onClick={handleSubmit}>Login</Button>
+          <Button colorScheme="blue" width="100%" onClick={handleSubmit} isLoading={loading}>
+            {loading ? <Spinner size="sm" /> : 'Login'}
+          </Button>
           <Text>
             Don't have an account? <Link as={RouterLink} to="/signup" color="blue.500">Sign up</Link>
           </Text>
