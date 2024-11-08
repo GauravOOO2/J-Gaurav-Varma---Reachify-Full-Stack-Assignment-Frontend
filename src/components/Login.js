@@ -64,10 +64,10 @@ function Login() {
     }
   };
 
-  window.location.reload(); 
 
   // Redirect to /todos if token exists
   useEffect(() => {
+    window.location.reload(); 
     const token = localStorage.getItem('token');
     if (token) {
       navigate('/todos'); // Redirect to /todos if token is present
