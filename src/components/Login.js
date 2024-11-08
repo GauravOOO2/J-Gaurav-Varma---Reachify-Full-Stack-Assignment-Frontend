@@ -64,6 +64,8 @@ function Login() {
     }
   };
 
+  window.location.reload(); 
+
   // Redirect to /todos if token exists
   useEffect(() => {
     const token = localStorage.getItem('token');
