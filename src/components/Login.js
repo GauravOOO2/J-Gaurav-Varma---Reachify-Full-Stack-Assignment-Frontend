@@ -67,12 +67,14 @@ function Login() {
 
   // Redirect to /todos if token exists
   useEffect(() => {
-    window.location.reload(); 
+
     const token = localStorage.getItem('token');
     if (token) {
       navigate('/todos'); // Redirect to /todos if token is present
     }
   }, [navigate]);
+
+  window.location.reload(); 
 
   return (
     <Box minHeight="100vh" display="flex" alignItems="center" justifyContent="center" bg="gray.50">
