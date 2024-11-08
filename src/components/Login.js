@@ -47,8 +47,11 @@ function Login() {
           duration: 5000,
           isClosable: true,
         });
-        console.log('Redirecting to /todos');
-        navigate('/todos'); // Redirect to /todos after successful login
+        
+        // Add a slight delay before redirecting
+        setTimeout(() => {
+          navigate('/todos'); // Redirect to /todos after successful login
+        }, 3000); // 100 milliseconds delay
       } else {
         throw new Error('Invalid token');
       }

@@ -41,8 +41,7 @@ function Signup() {
         isClosable: true,
       });
       
-      // Refresh the page
-      window.location.reload(); // Refresh the page
+
 
       // Redirect to login page
       navigate('/'); // Redirect to the login page
