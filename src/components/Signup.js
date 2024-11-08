@@ -40,6 +40,10 @@ function Signup() {
         duration: 5000,
         isClosable: true,
       });
+      
+      // Refresh the page
+      window.location.reload(); // Refresh the page
+
       // Redirect to login page
       navigate('/'); // Redirect to the login page
     } catch (error) {
