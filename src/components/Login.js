@@ -40,7 +40,7 @@ function Login() {
       );
 
       if (response.data.access_token) {
-        localStorage.setItem('token', response.data.access_token);
+        localStorage.setItem('token', response.data.access_token); // Store the token
         toast({
           title: 'Login successful!',
           status: 'success',
@@ -48,7 +48,7 @@ function Login() {
           isClosable: true,
         });
         console.log('Redirecting to /todos');
-        navigate('/todos');
+        navigate('/todos'); // Redirect to /todos after successful login
       } else {
         throw new Error('Invalid token');
       }

@@ -28,6 +28,7 @@ function Signup() {
     setLoading(true); // Start loading
 
     try {
+      // Sign up the user
       await axios.post('https://j-gaurav-varma-reachify-full-stack-assignment-backend.vercel.app/register', {
         username,
         password,
@@ -39,7 +40,8 @@ function Signup() {
         duration: 5000,
         isClosable: true,
       });
-      navigate('/');
+      // Redirect to login page
+      navigate('/'); // Redirect to the login page
     } catch (error) {
       console.error('Signup failed:', error);
       const errorMessage = error.response?.data?.detail || 'Signup failed. Please try again.';
