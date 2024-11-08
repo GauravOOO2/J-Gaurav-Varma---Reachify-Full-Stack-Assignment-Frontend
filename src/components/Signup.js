@@ -29,7 +29,7 @@ function Signup() {
 
     try {
       // Sign up the user
-      await axios.post('http://localhost:3000/register', {
+      await axios.post('https://j-gaurav-varma-reachify-full-stack-assignment-backend.vercel.app/register', {
         username,
         password,
       });
