@@ -18,7 +18,7 @@ function TodoList() {
 
   const fetchTodos = async () => {
     try {
-      const response = await axios.get('https://j-gaurav-varma-reachify-full-stack-assignment-backend.vercel.app/todos/', {
+      const response = await axios.get('http://localhost:3000/todos/', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setTodos(response.data);
@@ -40,7 +40,7 @@ function TodoList() {
     }
 
     try {
-      const response = await axios.post('https://j-gaurav-varma-reachify-full-stack-assignment-backend.vercel.app/todos/', {
+      const response = await axios.post('http://localhost:3000/todos/', {
         title: newTodo,
         description: '',
         completed: false
@@ -67,7 +67,7 @@ function TodoList() {
 
   const updateTodo = async () => {
     try {
-      const response = await axios.put(`https://j-gaurav-varma-reachify-full-stack-assignment-backend.vercel.app/todos/${editTodoId}`, {
+      const response = await axios.put(`http://localhost:3000/todos/${editTodoId}`, {
         title: editTitle,
         description: '',
         completed: false
@@ -95,7 +95,7 @@ function TodoList() {
 
   const deleteTodo = async (id) => {
     try {
-      await axios.delete(`https://j-gaurav-varma-reachify-full-stack-assignment-backend.vercel.app/todos/${id}`, {
+      await axios.delete(`http://localhost:3000/todos/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setTodos(todos.filter(todo => todo._id !== id));
