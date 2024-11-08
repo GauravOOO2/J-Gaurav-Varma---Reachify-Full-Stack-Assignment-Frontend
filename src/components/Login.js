@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, FormControl, FormLabel, Input, VStack, Heading, Text, Link, useToast, Spinner } from '@chakra-ui/react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -47,11 +47,6 @@ function Login() {
           duration: 5000,
           isClosable: true,
         });
-        
-        // Add a slight delay before redirecting
-        setTimeout(() => {
-          navigate('/todos'); // Redirect to /todos after successful login
-        }, 3000); // 100 milliseconds delay
       } else {
         throw new Error('Invalid token');
       }
@@ -68,6 +63,14 @@ function Login() {
       setLoading(false); // Stop loading
     }
   };
+
+  // Redirect to /todos if token exists
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/todos'); // Redirect to /todos if token is present
+    }
+  }, [navigate]);
 
   return (
     <Box minHeight="100vh" display="flex" alignItems="center" justifyContent="center" bg="gray.50">
